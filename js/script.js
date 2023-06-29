@@ -35,7 +35,11 @@ function incrementBracketNumbers(input) {
 }
 
 function incrementBracketNumber(val) {
-  return "[" + (parseInt(val.slice(1, -1))+1) + "]";
+  if (parseInt(val.slice(1, -1)) <= 0) {
+    return "[XXXX]";
+  } else {
+    return "[" + (parseInt(val.slice(1, -1))-1) + "]";
+  }
 }
 
 function copyToClipboard(text) {
