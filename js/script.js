@@ -10,12 +10,12 @@ var s = { // Settings from localStorage or default
 }
 document.body.className = s.theme;
 
-var incrementerState = {
+var decrementerState = {
   input: "",
   output: "",
   update: function(value) {
-    incrementerState.input = value;
-    incrementerState.output = incrementBracketNumbers(value);
+    decrementerState.input = value;
+    decrementerState.output = decrementBracketNumbers(value);
   }
 };
 
@@ -23,18 +23,18 @@ var incrementerState = {
 // Data End
 // Functions Start
 function setButtonHighlight(buttonName) {
-  document.getElementById('incrementer_btn').classList.remove("btn_highlight");
+  document.getElementById('decrementer_btn').classList.remove("btn_highlight");
   document.getElementById('chunker_btn').classList.remove("btn_highlight");
   document.getElementById('image-resizer_btn').classList.remove("btn_highlight");
   document.getElementById(buttonName).classList.add("btn_highlight");
 }
 
 var re = /\[(\d+)\]/g;
-function incrementBracketNumbers(input) {
-  return input.replace(re, incrementBracketNumber);
+function decrementBracketNumbers(input) {
+  return input.replace(re, decrementBracketNumber);
 }
 
-function incrementBracketNumber(val) {
+function decrementBracketNumber(val) {
   if (parseInt(val.slice(1, -1)) <= 0) {
     return "[XXXX]";
   } else {
@@ -72,7 +72,7 @@ var Header = {
     return m("header", [
       
         m('h1', 'SocialGalactic Tools'),
-        m('button', {id: 'incrementer_btn', onclick: function() {m.route.set("/incrementer")}}, "Prayer Count Incrementer"),
+        m('button', {id: 'decrementer_btn', onclick: function() {m.route.set("/decrementer")}}, "Prayer Count Decrementer"),
         m('button', {id: 'chunker_btn', onclick: function() {m.route.set("/chunker")}}, "Thread Chunker"),
         m('button', {id: 'image-resizer_btn', onclick: function() {m.route.set("/image-resizer")}}, "Image Resizer")
       
@@ -110,12 +110,12 @@ var themeOptions = {
   }
 };
 
-var Incrementer = {
+var Decrementer = {
   oncreate: function() {
-    setButtonHighlight('incrementer_btn');
+    setButtonHighlight('decrementer_btn');
   },
   view: function() {
-    return m("section", {class: "incrementer_section"}, [
+    return m("section", {class: "decrementer_section"}, [
       m(inputText),
       m(outputText),
     ]);
@@ -128,9 +128,9 @@ var inputText = {
     return m("div", [
       m('h3', 'Input'),
       m("textarea.input[placeholder=Paste text here...]", {
-        oninput: function (e) { incrementerState.update(e.target.value) }
+        oninput: function (e) { decrementerState.update(e.target.value) }
       }),
-      m('p', {class: 'input_count'}, incrementerState.input.length + ' Characters')
+      m('p', {class: 'input_count'}, decrementerState.input.length + ' Characters')
     ]);
   }
 };
@@ -139,8 +139,8 @@ var outputText = {
   view: function() {
     return m("div", [
       m('h3', 'Output'),
-      m('button', { onclick: function() {copyToClipboard(incrementerState.output)}}, 'Copy to Clipboard'),
-      m('p', incrementerState.output)
+      m('button', { onclick: function() {copyToClipboard(decrementerState.output)}}, 'Copy to Clipboard'),
+      m('p', decrementerState.output)
     ]);
   }
 };
@@ -172,8 +172,8 @@ var ImageResizer = {
 // Mithril Components End
 // Routing Start
 m.mount(root, Main);
-m.route(document.getElementById('content'), "/incrementer", {
-  "/incrementer": Incrementer,
+m.route(document.getElementById('content'), "/decrementer", {
+  "/decrementer": Decrementer,
   "/chunker": Chunker,
   "/image-resizer": ImageResizer,
 })
