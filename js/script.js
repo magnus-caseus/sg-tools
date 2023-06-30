@@ -59,7 +59,6 @@ var chunkerState = {
           chunkBeginning = value.slice(idx, idx+chunkLength);
           splitPoint = chunkBeginning.search(splitRegex)+1;
         }
-        console.log("splitpoint: ", splitPoint, "chunkLength: ", chunkLength);
         if (splitPoint > 0) {
           chunkBeginning = chunkBeginning.slice(0, splitPoint);
           idx += splitPoint;
@@ -72,7 +71,6 @@ var chunkerState = {
         chunkLength = chunkerState.charLimit - paginationLength;
       }
       iterLimit--;
-      console.log("iter limit: ", iterLimit);
     }
     chunkerState.outputs = arr;
     chunkerState.copied = Array(arr.length).fill(false);
