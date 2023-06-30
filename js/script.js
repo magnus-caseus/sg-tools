@@ -40,7 +40,6 @@ var chunkerState = {
     var arr = [];
 
     do { // Getting number of chunks, since even the first chunk needs to know
-      console.log('prev: ', chunkCountPrev, ', curr: ', chunkCount);
       chunkCountPrev = chunkCount;
       chunkTotal = chunkCount;
       chunkCount = 0;
@@ -59,7 +58,6 @@ var chunkerState = {
     paginationLength = 2 + digitCount(chunkCount) + digitCount(chunkTotal);
     chunkLength = chunkerState.charLimit - paginationLength;
     while(idx < value.length) {
-      console.log('chunk: ', chunkCount, ', pagLen: ', paginationLength, ', chunkLen: ', chunkLength);
       if(idx+chunkLength >= value.length) {
         arr.push(value.slice(idx).trim() + " " + chunkCount + "/" + chunkTotal);
       } else {
@@ -121,7 +119,6 @@ function scrollToAnchor( anchor ){
   var targetEl = is(anchor) ? document.getElementById(anchor) : document.body;
   var scrollTop = window.scrollY || document.documentElement.scrollTop;
   var target = is(targetEl) ? targetEl.getBoundingClientRect().top : 0;
-  console.log('target: ', target, 'scrollTop: ', scrollTop);
   window.scroll({
       top: target + scrollTop - 200,
       left: 0,
@@ -165,7 +162,6 @@ var themeOptions = {
         class: 'radios_container',
         value: s.theme,
         onchange: e => {
-          console.log('radio form value', e.target.value);
           s.theme = e.target.value;
           localStorage.setItem('settings', JSON.stringify(s));
           document.body.className = s.theme;
