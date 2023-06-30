@@ -20,6 +20,8 @@ var decrementerState = {
   }
 };
 
+
+var splitRegex = /\W\w+$/g;
 var chunkerState = {
   charLimit: s.charLimit,
   input: "",
@@ -32,41 +34,45 @@ var chunkerState = {
       return;
     }
     var idx = 0;
-    var chunkTotal = 1;
+    var chunkTotal = 0;
     var chunkCount = 1;
-    var chunkCountPrev = 1;
+    var iterLimit = 10;
     var paginationLength = 4;
     var chunkLength = chunkerState.charLimit - paginationLength;
     var arr = [];
 
-    do { // Getting number of chunks, since even the first chunk needs to know
-      chunkCountPrev = chunkCount;
+    while(chunkCount != chunkTotal && iterLimit > 0) {
       chunkTotal = chunkCount;
       chunkCount = 0;
       idx = 0;
+      arr = [];
+      paginationLength = 2 + digitCount(chunkCount) + digitCount(chunkTotal);
+      chunkLength = chunkerState.charLimit - paginationLength;
+      var chunkBeginning = "";
+      var splitPoint = -1;
       while(idx < value.length) {
-        idx += chunkLength;
+        chunkBeginning = "";
+        splitPoint = -2;
+        if(idx+chunkLength >= value.length) {
+          chunkBeginning = value.slice(idx);
+        } else {
+          chunkBeginning = value.slice(idx, idx+chunkLength);
+          splitPoint = chunkBeginning.search(splitRegex)+1;
+        }
+        console.log("splitpoint: ", splitPoint, "chunkLength: ", chunkLength);
+        if (splitPoint > 0) {
+          chunkBeginning = chunkBeginning.slice(0, splitPoint);
+          idx += splitPoint;
+        } else {
+          idx += chunkLength;
+        }
         chunkCount++;
+        arr.push(chunkBeginning.trim() + " " + chunkCount + "/" + chunkTotal);
         paginationLength = 2 + digitCount(chunkCount) + digitCount(chunkTotal);
         chunkLength = chunkerState.charLimit - paginationLength;
       }
-    } while (chunkCount != chunkCountPrev);
-
-    
-    chunkCount = 1;
-    idx = 0;
-    paginationLength = 2 + digitCount(chunkCount) + digitCount(chunkTotal);
-    chunkLength = chunkerState.charLimit - paginationLength;
-    while(idx < value.length) {
-      if(idx+chunkLength >= value.length) {
-        arr.push(value.slice(idx).trim() + " " + chunkCount + "/" + chunkTotal);
-      } else {
-        arr.push(value.slice(idx, idx+chunkLength).trim() + " " + chunkCount + "/" + chunkTotal);
-      }
-      chunkCount++;
-      idx += chunkLength;
-      paginationLength = 2 + digitCount(chunkCount) + digitCount(chunkTotal);
-      chunkLength = chunkerState.charLimit - paginationLength;
+      iterLimit--;
+      console.log("iter limit: ", iterLimit);
     }
     chunkerState.outputs = arr;
     chunkerState.copied = Array(arr.length).fill(false);
@@ -84,6 +90,11 @@ function setButtonHighlight(buttonName) {
 }
 
 function digitCount(n) {
+  if (n == 0) {
+    return 1;
+  } else if (n < 0) {
+    return 0;
+  }
   return Math.log(n) * Math.LOG10E + 1 | 0;
 }
 
@@ -274,6 +285,7 @@ var ChunkerOutput = {
         return m('div', {class: 'chunk_container' + copiedClass}, [
           m('div', {class: 'flex-row'}, [
             m('p', {id: anchor, class: 'chunk_label'}, 'Chunk ' + (index+1) + '/' + arr.length),
+            m('span', chunkText.length.toString() + ' Characters'),
             m('button', { onclick: function () {
               copyToClipboard(chunkText);
               chunkerState.copied[index] = true;

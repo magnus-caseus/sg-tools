@@ -198,6 +198,11 @@ button {
 .chunk_container p {
     margin-block-start: 0.5em;
     margin-block-end: 0.5em;
+    word-wrap: break-word;
+}
+
+.chunk_container span {
+    font-size: 0.8em;
 }
 
 .chunk_label {
