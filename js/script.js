@@ -21,7 +21,7 @@ var decrementerState = {
 };
 
 var chunkerState = {
-  charLimit: 240,
+  charLimit: s.charLimit,
   input: "",
   outputs: [],
   copied: [],
