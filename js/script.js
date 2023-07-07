@@ -27,9 +27,9 @@ var chunkerState = {
   input: "",
   outputs: [],
   copied: [],
-  update: function(value) {
+  update: function (value) {
     chunkerState.input = value;
-    if(value.length == 0) {
+    if (value.length == 0) {
       chunkerState.outputs = [""];
       return;
     }
@@ -41,7 +41,7 @@ var chunkerState = {
     var chunkLength = chunkerState.charLimit - paginationLength;
     var arr = [];
 
-    while(chunkCount != chunkTotal && iterLimit > 0) {
+    while (chunkCount != chunkTotal && iterLimit > 0) {
       chunkTotal = chunkCount;
       chunkCount = 0;
       idx = 0;
@@ -50,14 +50,14 @@ var chunkerState = {
       chunkLength = chunkerState.charLimit - paginationLength;
       var chunkBeginning = "";
       var splitPoint = -1;
-      while(idx < value.length) {
+      while (idx < value.length) {
         chunkBeginning = "";
         splitPoint = -2;
-        if(idx+chunkLength >= value.length) {
+        if (idx + chunkLength >= value.length) {
           chunkBeginning = value.slice(idx);
         } else {
-          chunkBeginning = value.slice(idx, idx+chunkLength);
-          splitPoint = chunkBeginning.search(splitRegex)+1;
+          chunkBeginning = value.slice(idx, idx + chunkLength);
+          splitPoint = chunkBeginning.search(splitRegex) + 1;
         }
         if (splitPoint > 0) {
           chunkBeginning = chunkBeginning.slice(0, splitPoint);
@@ -122,16 +122,16 @@ function copyToClipboard(text) {
   );
 }
 
-function scrollToAnchor( anchor ){
-  var is = (el)=>{return el !== undefined && el !== null};
+function scrollToAnchor(anchor) {
+  var is = (el) => { return el !== undefined && el !== null };
   //if you pass an undefined anchor it will scroll to the top of the body
   var targetEl = is(anchor) ? document.getElementById(anchor) : document.body;
   var scrollTop = window.scrollY || document.documentElement.scrollTop;
   var target = is(targetEl) ? targetEl.getBoundingClientRect().top : 0;
   window.scroll({
-      top: target + scrollTop - 200,
-      left: 0,
-      behavior: "smooth"
+    top: target + scrollTop - 200,
+    left: 0,
+    behavior: "smooth"
   });
 }
 // Functions End
@@ -240,13 +240,15 @@ var Chunker = {
 
 var ChunkerSettings = {
   view: function () {
-    return m("form", {onsubmit: function(e) {
-      e.preventDefault();
-      chunkerState.update(chunkerState.input);
-    }}, [
-      m("p", {class: "label_container charlimit"}, [
+    return m("form", {
+      onsubmit: function (e) {
+        e.preventDefault();
+        chunkerState.update(chunkerState.input);
+      }
+    }, [
+      m("p", { class: "label_container charlimit" }, [
         m("label.label[for=charlimit]", "Character Limit"),
-        m("span", {class: "value pitch"}, s.pitch),
+        m("span", { class: "value pitch" }, s.pitch),
       ]),
       m("input.input[type=number]", {
         oninput: function (e) {
@@ -256,7 +258,7 @@ var ChunkerSettings = {
         },
         value: chunkerState.charLimit,
         id: "charlimit"
-    })
+      })
     ]);
   }
 };
@@ -277,21 +279,23 @@ var ChunkerOutput = {
   view: function () {
     return m("div", [
       m('h3', 'Output Into Chunks'),
-      chunkerState.outputs.map(function(chunkText, index, arr) {
-        var copiedClass = chunkerState.copied[index] ? ' copied':'';
-        var anchor = "chunk"+index;
-        return m('div', {class: 'chunk_container' + copiedClass}, [
-          m('div', {class: 'flex-row'}, [
-            m('p', {id: anchor, class: 'chunk_label'}, 'Chunk ' + (index+1) + '/' + arr.length),
+      chunkerState.outputs.map(function (chunkText, index, arr) {
+        var copiedClass = chunkerState.copied[index] ? ' copied' : '';
+        var anchor = "chunk" + index;
+        return m('div', { class: 'chunk_container' + copiedClass }, [
+          m('div', { class: 'flex-row' }, [
+            m('p', { id: anchor, class: 'chunk_label' }, 'Chunk ' + (index + 1) + '/' + arr.length),
             m('span', chunkText.length.toString() + ' Characters'),
-            m('button', { onclick: function () {
-              copyToClipboard(chunkText);
-              chunkerState.copied[index] = true;
-              m.route.set("/chunker", {
-                "a": anchor
-              });
-              scrollToAnchor(anchor);
-            } },  'Copy Chunk ' + (index+1) + '/' + arr.length + ' to Clipboard')
+            m('button', {
+              onclick: function () {
+                copyToClipboard(chunkText);
+                chunkerState.copied[index] = true;
+                m.route.set("/chunker", {
+                  "a": anchor
+                });
+                scrollToAnchor(anchor);
+              }
+            }, 'Copy Chunk ' + (index + 1) + '/' + arr.length + ' to Clipboard')
           ]),
           m('p', chunkText)
         ]);
@@ -307,6 +311,17 @@ var ImageResizer = {
   view: function () {
     return m("section", { class: "image-resizer_section" }, [
       m('h2', 'Under Construction...maybe'),
+      m('p', [
+        m('span', 'In the meantime I recommend '),
+        m('a', { href: 'https://bulkresizephotos.com/' }, 'bulkresizephotos.com'),
+      ]),
+      m('p', 'Links with preset settings:'),
+      m('p',
+        m('a', { href: 'https://bulkresizephotos.com/en?resize_type=filesize&resize_value=200000&skip_resize_settings=true' }, 'Resize to 200kb')
+      ),
+      m('p',
+        m('a', { href: 'https://bulkresizephotos.com/en?resize_type=filesize&resize_value=500000&skip_resize_settings=true' }, 'Resize to 500kb')
+      )
     ]);
 
   }
