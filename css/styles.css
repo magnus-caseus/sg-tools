@@ -113,6 +113,10 @@ li {
     line-height: 1.2;    
 }
 
+code {
+    color: cornflowerblue;
+}
+
 button,
 input,
 a,

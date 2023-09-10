@@ -83,6 +83,7 @@ var chunkerState = {
 function setButtonHighlight(buttonName) {
   document.getElementById('instructions_btn').classList.remove("btn_highlight");
   document.getElementById('decrementer_btn').classList.remove("btn_highlight");
+  document.getElementById('extractor_btn').classList.remove("btn_highlight");
   document.getElementById('chunker_btn').classList.remove("btn_highlight");
   document.getElementById('image-resizer_btn').classList.remove("btn_highlight");
   document.getElementById(buttonName).classList.add("btn_highlight");
@@ -154,6 +155,7 @@ var Header = {
       m('h1', 'SocialGalactic Tools'),
       m('button', { id: 'instructions_btn', onclick: function () { m.route.set("/instructions") } }, "Prayer List Instructions"),
       m('button', { id: 'decrementer_btn', onclick: function () { m.route.set("/decrementer") } }, "Prayer Count Decrementer"),
+      m('button', { id: 'extractor_btn', onclick: function () { m.route.set("/extractor") } }, "Thread Extractor"),
       m('button', { id: 'chunker_btn', onclick: function () { m.route.set("/chunker") } }, "Thread Chunker"),
       m('button', { id: 'image-resizer_btn', onclick: function () { m.route.set("/image-resizer") } }, "Image Resizer")
 
@@ -257,6 +259,30 @@ var outputText = {
       m('button', { onclick: function () { copyToClipboard(decrementerState.output) } }, 'Copy to Clipboard'),
       m('p', decrementerState.output)
     ]);
+  }
+};
+
+
+var extractorScript = 'copy(Array.from(document.querySelectorAll("p")).filter(item => item.attributes.length === 0).map(item => item.innerText).join("\\n\\n"));';
+var Extractor = {
+  oncreate: function () {
+    setButtonHighlight('extractor_btn');
+  },
+  view: function () {
+    return m("section", { class: "extractor_section" }, [
+      m('h3', 'SG Thread Extractor'),
+      m('ul', [
+        m('li', 'Copy the following script into your clipboard:'),
+        m('p', [m('code', extractorScript), m('button', {onclick: function() { copyToClipboard(extractorScript)}}, 'Copy to Clipboard')]),
+        m('li', 'Go to the SocialGalactic thread you would like to extract.'),
+        m('li', "Open your browser's dev tools. With [ Ctrl ] + [ Shift ] + [ i ], or by right clicking and selecting \"Inspect\""),
+        m('li', 'Go to the "Console" tab of the dev tools.'),
+        m('li', 'Paste in the script and press enter to run.'),
+        m('li', 'The contents of the SG thread should now be in your clipboard.')
+      ])
+
+    ]);
+
   }
 };
 
@@ -369,6 +395,7 @@ m.mount(root, Main);
 m.route(document.getElementById('content'), "/decrementer", {
   "/instructions": Instructions,
   "/decrementer": Decrementer,
+  "/extractor": Extractor,
   "/chunker": Chunker,
   "/image-resizer": ImageResizer,
 })
