@@ -81,6 +81,7 @@ var chunkerState = {
 // Data End
 // Functions Start
 function setButtonHighlight(buttonName) {
+  document.getElementById('instructions_btn').classList.remove("btn_highlight");
   document.getElementById('decrementer_btn').classList.remove("btn_highlight");
   document.getElementById('chunker_btn').classList.remove("btn_highlight");
   document.getElementById('image-resizer_btn').classList.remove("btn_highlight");
@@ -150,8 +151,8 @@ var Main = {
 var Header = {
   view: function () {
     return m("header", [
-
       m('h1', 'SocialGalactic Tools'),
+      m('button', { id: 'instructions_btn', onclick: function () { m.route.set("/instructions") } }, "Prayer List Instructions"),
       m('button', { id: 'decrementer_btn', onclick: function () { m.route.set("/decrementer") } }, "Prayer Count Decrementer"),
       m('button', { id: 'chunker_btn', onclick: function () { m.route.set("/chunker") } }, "Thread Chunker"),
       m('button', { id: 'image-resizer_btn', onclick: function () { m.route.set("/image-resizer") } }, "Image Resizer")
@@ -187,6 +188,41 @@ var themeOptions = {
       ])
     ]);
   }
+};
+
+var Instructions = {
+  oncreate: function () {
+    setButtonHighlight('instructions_btn');
+  },
+  view: function () {
+    return m("section", { class: "decrementer_section" }, [
+      m('h3', 'Prayer List Instructions'),
+      m('ul', [
+        m('li', 'Prayer graphic always on top post'),
+        m('li', [
+          m('span', 'Keep individual entries under 180 characters, pics'),
+          m('a', { onclick: function () { m.route.set("/image-resizer") } }, 'under 200KB'),
+          m('span', ', so bronze can also help')
+        ]),
+        m('li', 'Graphics on SG have to be expanded first to download properly'),
+        m('li', 'New items 4d count down [3-0]'),
+        m('li', 'Death/ Birth/ Life-changing 7d [6-0]'),
+        m('li', 'SG & Immediate Family fatalities [29-0]'),
+        m('li', 'Extensions can be requested'),
+        m('li', 'SGIF ongoing serious need = indefinite'),
+        m('li', [m('span', 'To re-number the count downs all at once, cut and paste the entries into one list and paste the whole thing into'),
+        m('a', { onclick: function () { m.route.set("/decrementer") } }, 'Prayer Count Decrementer'),]),
+        m('li', 'Counts that go below zero are shown as [XXXX]. Those entries should be removed or extended.')
+      ]),
+      m('p', [
+        m('span', 'Note that the'),
+        m('a', { onclick: function () { m.route.set("/chunker") } }, 'Thread Chunker'),
+        m('span', 'is a tool for text only threads, not the prayer list.')
+      ]),
+    ]);
+
+  }
+
 };
 
 var Decrementer = {
@@ -310,9 +346,9 @@ var ImageResizer = {
   },
   view: function () {
     return m("section", { class: "image-resizer_section" }, [
-      m('h2', 'Under Construction...maybe'),
+      m('h3', 'Image Resizer'),
       m('p', [
-        m('span', 'In the meantime I recommend '),
+        m('span', 'I recommend '),
         m('a', { href: 'https://bulkresizephotos.com/' }, 'bulkresizephotos.com'),
       ]),
       m('p', 'Links with preset settings:'),
@@ -331,6 +367,7 @@ var ImageResizer = {
 // Routing Start
 m.mount(root, Main);
 m.route(document.getElementById('content'), "/decrementer", {
+  "/instructions": Instructions,
   "/decrementer": Decrementer,
   "/chunker": Chunker,
   "/image-resizer": ImageResizer,
