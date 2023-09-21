@@ -200,6 +200,26 @@ var Instructions = {
     return m("section", { class: "decrementer_section" }, [
       m('h3', 'Prayer List Instructions'),
       m('ul', [
+        m('li', 'Cut the whole list from the previous day, all entries at once'),
+        m('li', [
+          m('span', 'Paste into the'),
+          m('a', { onclick: function () { m.route.set("/decrementer") } }, 'Prayer Count Decrementer'),
+          m('span', 'input field and press the "Copy to Clipboard" button. Re-numbering is done all at once!')
+        ]),
+        m('li', 'Counts that go below zero are shown as [XXXX]. Those entries should be removed or extended.'),
+        m('li', 'Clean up included name headers'),
+        m('li', 'Change date to today'),
+        m('li', 'Scan #prayerrequest, #praisereport and last day’s #prayerlist each day for new add and remove requests'),
+        m('li', [m('span', 'Use the numbering rules below for each'), m('ul', [
+          m('li', 'New items 4d count down [3-0]'),
+        m('li', 'Death/ Birth/ Life-changing 7d [6-0]'),
+        m('li', 'SG & Immediate Family fatalities [29-0]'),
+        m('li', 'Extensions can be requested'),
+        m('li', 'SGIF ongoing serious need = indefinite'),
+        ])]),
+        m('li', 'Place new items alphabetically within your list'),
+        m('li', 'Download graphics for use'),
+        m('li', 'Post to SG'),
         m('li', 'Prayer graphic always on top post'),
         m('li', [
           m('span', 'Keep individual entries under 180 characters, pics'),
@@ -207,14 +227,8 @@ var Instructions = {
           m('span', ', so bronze can also help')
         ]),
         m('li', 'Graphics on SG have to be expanded first to download properly'),
-        m('li', 'New items 4d count down [3-0]'),
-        m('li', 'Death/ Birth/ Life-changing 7d [6-0]'),
-        m('li', 'SG & Immediate Family fatalities [29-0]'),
-        m('li', 'Extensions can be requested'),
-        m('li', 'SGIF ongoing serious need = indefinite'),
-        m('li', [m('span', 'To re-number the count downs all at once, cut and paste the entries into one list and paste the whole thing into'),
-        m('a', { onclick: function () { m.route.set("/decrementer") } }, 'Prayer Count Decrementer'),]),
-        m('li', 'Counts that go below zero are shown as [XXXX]. Those entries should be removed or extended.')
+
+
       ]),
       m('p', [
         m('span', 'Note that the'),
@@ -273,7 +287,7 @@ var Extractor = {
       m('h3', 'SG Thread Extractor'),
       m('ul', [
         m('li', 'Copy the following script into your clipboard:'),
-        m('p', [m('code', extractorScript), m('button', {onclick: function() { copyToClipboard(extractorScript)}}, 'Copy to Clipboard')]),
+        m('p', [m('code', extractorScript), m('button', { onclick: function () { copyToClipboard(extractorScript) } }, 'Copy to Clipboard')]),
         m('li', 'Go to the SocialGalactic thread you would like to extract.'),
         m('li', "Open your browser's dev tools. With [ Ctrl ] + [ Shift ] + [ i ], or by right clicking and selecting \"Inspect\""),
         m('li', 'Go to the "Console" tab of the dev tools.'),
