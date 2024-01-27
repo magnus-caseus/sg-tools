@@ -22,6 +22,7 @@ var decrementerState = {
 
 
 var splitRegex = /\W\w+$/g;
+var delimiterRegex = /(\n{4,})/g;
 var chunkerState = {
   charLimit: s.charLimit,
   input: "",
@@ -55,6 +56,10 @@ var chunkerState = {
         splitPoint = -2;
         if (idx + chunkLength >= value.length) {
           chunkBeginning = value.slice(idx);
+        } else if (value.slice(idx, idx + chunkLength).search(delimiterRegex) > -1) {
+          chunkBeginning = value.slice(idx, idx + chunkLength);
+          delimiterLength = chunkBeginning.match(delimiterRegex)[0].length;
+          splitPoint = chunkBeginning.search(delimiterRegex) + delimiterLength;
         } else {
           chunkBeginning = value.slice(idx, idx + chunkLength);
           splitPoint = chunkBeginning.search(splitRegex) + 1;
@@ -212,10 +217,10 @@ var Instructions = {
         m('li', 'Scan #prayerrequest, #praisereport and last day’s #prayerlist each day for new add and remove requests'),
         m('li', [m('span', 'Use the numbering rules below for each'), m('ul', [
           m('li', 'New items 4d count down [3-0]'),
-        m('li', 'Death/ Birth/ Life-changing 7d [6-0]'),
-        m('li', 'SG & Immediate Family fatalities [29-0]'),
-        m('li', 'Extensions can be requested'),
-        m('li', 'SGIF ongoing serious need = indefinite'),
+          m('li', 'Death/ Birth/ Life-changing 7d [6-0]'),
+          m('li', 'SG & Immediate Family fatalities [29-0]'),
+          m('li', 'Extensions can be requested'),
+          m('li', 'SGIF ongoing serious need = indefinite'),
         ])]),
         m('li', 'Place new items alphabetically within your list'),
         m('li', 'Download graphics for use'),
